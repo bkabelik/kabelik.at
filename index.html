@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,29 +10,61 @@
     <!-- Three.js for 3D Rendering -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap"
+        rel="stylesheet">
+
     <style>
-        body { margin: 0; overflow-x: hidden; background: #050505; color: white; font-family: 'Inter', sans-serif; }
-        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; }
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            background: #050505;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
         .glass-panel {
             background: rgba(20, 20, 20, 0.6);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
         }
-        .tech-font { font-family: 'JetBrains Mono', monospace; }
+
+        .tech-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
         .gradient-text {
-            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(90deg, #e30613 0%, #003a5d 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
     </style>
 </head>
+
 <body>
 
     <!-- 3D Background Layer -->
@@ -39,14 +72,21 @@
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 mix-blend-difference">
-        <div class="text-2xl font-bold tracking-tighter">KABELIK<span class="text-blue-400">.AT</span></div>
-        <div class="hidden md:flex gap-8 text-sm font-medium">
-            <a href="#lidar" class="hover:text-blue-400 transition">LiDAR</a>
-            <a href="#bathymetry" class="hover:text-blue-400 transition">BATHYMETRY</a>
-            <a href="#splats" class="hover:text-blue-400 transition">GAUSSIAN SPLATS</a>
-            <a href="#contact" class="hover:text-blue-400 transition">CONTACT</a>
+        <a href="#" class="flex items-center gap-2">
+            <img src="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png"
+                alt="Kabelik Logo" class="h-10 w-auto">
+        </a>
+        <div class="hidden md:flex gap-4 text-[10px] font-bold tracking-widest text-[#e30613]">
+            <a href="#lidar" class="hover:text-white transition">LIDAR</a>
+            <a href="#bathymetry" class="hover:text-white transition">BATHYMETRY</a>
+            <a href="#photogrammetry" class="hover:text-white transition">PHOTOGRAMMETRY</a>
+            <a href="#web-gis" class="hover:text-white transition">WEB/GIS</a>
+            <a href="#it-services" class="hover:text-white transition">IT SERVICES</a>
+            <a href="#about-us" class="hover:text-white transition">ABOUT US</a>
+            <a href="#contact" class="hover:text-white transition">CONTACT</a>
         </div>
-        <button class="border border-white/20 px-4 py-2 rounded-full text-xs hover:bg-white hover:text-black transition">
+        <button
+            class="border border-white/20 px-4 py-2 rounded-full text-xs hover:bg-white hover:text-black transition">
             CLIENT LOGIN
         </button>
     </nav>
@@ -56,16 +96,18 @@
         <!-- HERO SECTION -->
         <section class="h-screen flex items-center px-6 md:px-20">
             <div class="max-w-2xl">
-                <div class="tech-font text-blue-400 text-xs mb-4 tracking-widest">DIGITAL TWIN TECHNOLOGY</div>
+                <div class="tech-font text-[#e30613] text-xs mb-4 tracking-widest">DIGITAL TWIN TECHNOLOGY</div>
                 <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
                     Capture Reality.<br>
                     <span class="gradient-text">Down to the pixel.</span>
                 </h1>
                 <p class="text-gray-400 text-lg mb-8 max-w-lg">
-                    Specialized in Airborne LiDAR, High-Res Bathymetry, and Photorealistic Gaussian Splatting for engineering and simulation.
+                    Specialized in Airborne LiDAR, High-Res Bathymetry, and Photorealistic Gaussian Splatting for
+                    engineering and simulation.
                 </p>
                 <div class="flex gap-4">
-                    <button class="bg-blue-600 hover:bg-blue-500 px-8 py-3 rounded-lg font-medium transition">
+                    <button
+                        class="bg-[#e30613] hover:bg-red-700 px-8 py-3 rounded-lg font-medium transition text-white">
                         View Projects
                     </button>
                     <button class="glass-panel px-8 py-3 rounded-lg font-medium hover:bg-white/10 transition">
@@ -73,7 +115,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Floating UI Element simulating data -->
             <div class="absolute right-10 bottom-20 glass-panel p-6 w-64 hidden md:block">
                 <div class="flex justify-between text-xs text-gray-400 mb-2">
@@ -85,48 +127,54 @@
                     <span class="tech-font">2 cm/px</span>
                 </div>
                 <div class="h-1 w-full bg-gray-700 mt-2 overflow-hidden rounded-full">
-                    <div class="h-full bg-blue-500 w-2/3"></div>
+                    <div class="h-full bg-[#e30613] w-2/3"></div>
                 </div>
             </div>
         </section>
 
         <!-- LIDAR SECTION -->
-        <section id="lidar" class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
+        <section id="lidar"
+            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div class="glass-panel p-8 md:p-12">
-                    <h2 class="text-3xl font-bold mb-4">Airborne LiDAR</h2>
+                    <h2 class="text-3xl font-bold mb-4">LIDAR</h2>
                     <p class="text-gray-400 mb-6">
-                        We deliver classified point clouds with extreme density. From forestry management to infrastructure monitoring, our data integrates seamlessly into your GIS workflow.
+                        We deliver classified point clouds with extreme density. From forestry management to
+                        infrastructure monitoring, our data integrates seamlessly into your GIS workflow.
                     </p>
                     <ul class="space-y-3 text-sm text-gray-300">
                         <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> 20+ points / m² density
+                            <span class="w-2 h-2 bg-[#e30613] rounded-full"></span> 20+ points / m² density
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> Full waveform analysis
+                            <span class="w-2 h-2 bg-[#e30613] rounded-full"></span> Full waveform analysis
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span> DTM & DSM generation
+                            <span class="w-2 h-2 bg-[#e30613] rounded-full"></span> DTM & DSM generation
                         </li>
                     </ul>
                 </div>
                 <!-- Placeholder for where a real viewer would go -->
-                <div class="h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
+                <div
+                    class="h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
                     <span class="tech-font text-xs text-gray-500">[ Interactive Potree Viewer Integration Area ]</span>
                 </div>
             </div>
         </section>
 
         <!-- BATHYMETRY SECTION -->
-        <section id="bathymetry" class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
+        <section id="bathymetry"
+            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
             <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="order-2 md:order-1 h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
+                <div
+                    class="order-2 md:order-1 h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
                     <span class="tech-font text-xs text-gray-500">[ Depth Map / 3D Water Mesh Area ]</span>
                 </div>
                 <div class="glass-panel p-8 md:p-12 order-1 md:order-2">
-                    <h2 class="text-3xl font-bold mb-4">Bathymetric Scanning</h2>
+                    <h2 class="text-3xl font-bold mb-4">BATHYMETRY</h2>
                     <p class="text-gray-400 mb-6">
-                        Using green-wavelength laser technology, we map the underwater topography of rivers and lakes. Seamlessly merging land and water data into a single mesh.
+                        Using green-wavelength laser technology, we map the underwater topography of rivers and lakes.
+                        Seamlessly merging land and water data into a single mesh.
                     </p>
                     <div class="flex gap-4 mt-4">
                         <div class="text-center">
@@ -143,18 +191,67 @@
         </section>
 
         <!-- GAUSSIAN SPLATTING SECTION -->
-        <section id="splats" class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
-             <div class="max-w-3xl mx-auto text-center">
-                <div class="tech-font text-purple-400 text-xs mb-4">NEXT GEN VISUALIZATION</div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Gaussian Splatting</h2>
+        <section id="photogrammetry"
+            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="tech-font text-[#e30613] text-xs mb-4">NEXT GEN VISUALIZATION</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">PHOTOGRAMMETRY</h2>
                 <p class="text-gray-400 text-lg mb-10">
-                    Move beyond static meshes. We convert drone imagery into photorealistic, navigable 3D radiance fields. Perfect for architectural preservation and construction progress tracking.
+                    Move beyond static meshes. We convert drone imagery into photorealistic, navigable 3D radiance
+                    fields. Perfect for architectural preservation and construction progress tracking.
                 </p>
                 <div class="inline-block glass-panel p-2 rounded-xl">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Terrestrial_laser_scan_of_a_building_interior.jpg/1280px-Terrestrial_laser_scan_of_a_building_interior.jpg" 
-                         alt="Point Cloud Example" class="rounded-lg opacity-50 grayscale hover:grayscale-0 transition duration-500">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Terrestrial_laser_scan_of_a_building_interior.jpg/1280px-Terrestrial_laser_scan_of_a_building_interior.jpg"
+                        alt="Point Cloud Example"
+                        class="rounded-lg opacity-50 grayscale hover:grayscale-0 transition duration-500">
                     <div class="mt-2 text-xs text-gray-500 tech-font">INTERACTIVE SPLAT PREVIEW</div>
                 </div>
+            </div>
+        </section>
+
+        <!-- WEB/GIS SECTION -->
+        <section id="web-gis"
+            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="glass-panel p-8 md:p-12">
+                    <h2 class="text-3xl font-bold mb-4">WEB/GIS</h2>
+                    <p class="text-gray-400 mb-6">
+                        Custom web-based GIS solutions for data visualization and spatial analysis.
+                    </p>
+                </div>
+                <div
+                    class="h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
+                    <span class="tech-font text-xs text-gray-500">[ Interactive Map Dashboard Area ]</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- IT SERVICES SECTION -->
+        <section id="it-services"
+            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div
+                    class="order-2 md:order-1 h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
+                    <span class="tech-font text-xs text-gray-500">[ Infrastructure Visualization Area ]</span>
+                </div>
+                <div class="glass-panel p-8 md:p-12 order-1 md:order-2">
+                    <h2 class="text-3xl font-bold mb-4">IT SERVICES</h2>
+                    <p class="text-gray-400 mb-6">
+                        Professional IT infrastructure and support tailored for geomatics and high-performance
+                        computing.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT US SECTION -->
+        <section id="about-us"
+            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">ABOUT US</h2>
+                <p class="text-gray-400 text-lg">
+                    Kabelik GmbH is a leader in remote sensing and geomatics, based in Wiener Neustadt, Austria.
+                </p>
             </div>
         </section>
 
@@ -163,7 +260,9 @@
             <h2 class="text-2xl font-bold mb-8">Kabelik GmbH</h2>
             <p class="text-gray-400 mb-8">Remote Sensing | Geomatics | IT Services</p>
             <div class="text-sm text-gray-600 tech-font">
-                Wiener Neustadt, Austria<br>
+                Kabelik GmbH, Merbotogasse 58D<br>
+                2700 Wiener Neustadt<br>
+                AUSTRIA<br>
                 office@kabelik.at
             </div>
         </footer>
@@ -177,7 +276,7 @@
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        
+
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
@@ -186,32 +285,32 @@
         const vertices = [];
         const colors = [];
 
-        const color1 = new THREE.Color(0x4facfe);
-        const color2 = new THREE.Color(0x00f2fe);
+        const color1 = new THREE.Color(0xe30613);
+        const color2 = new THREE.Color(0x003a5d);
 
-        for ( let i = 0; i < 5000; i ++ ) {
+        for (let i = 0; i < 5000; i++) {
             const x = (Math.random() - 0.5) * 2000;
             const y = (Math.random() - 0.5) * 2000;
             const z = (Math.random() - 0.5) * 2000;
-            vertices.push( x, y, z );
+            vertices.push(x, y, z);
 
             // Gradient color based on height (Y)
             const mixedColor = color1.clone().lerp(color2, (y + 1000) / 2000);
-            colors.push( mixedColor.r, mixedColor.g, mixedColor.b );
+            colors.push(mixedColor.r, mixedColor.g, mixedColor.b);
         }
 
-        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-        geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-        const material = new THREE.PointsMaterial( { 
-            size: 3, 
+        const material = new THREE.PointsMaterial({
+            size: 3,
             vertexColors: true,
             transparent: true,
             opacity: 0.8
-        } );
+        });
 
-        const starField = new THREE.Points( geometry, material );
-        scene.add( starField );
+        const starField = new THREE.Points(geometry, material);
+        scene.add(starField);
 
         camera.position.z = 100;
 
@@ -225,7 +324,7 @@
         });
 
         function animate() {
-            requestAnimationFrame( animate );
+            requestAnimationFrame(animate);
 
             // Gentle rotation
             starField.rotation.x += 0.0005;
@@ -236,7 +335,7 @@
             camera.position.y += (-mouseY * 0.05 - camera.position.y) * 0.05;
             camera.lookAt(scene.position);
 
-            renderer.render( scene, camera );
+            renderer.render(scene, camera);
         }
 
         animate();
@@ -249,4 +348,5 @@
         });
     </script>
 </body>
+
 </html>
