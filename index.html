@@ -156,17 +156,16 @@
                         </li>
                     </ul>
                     <div class="mt-8 pt-6 border-t border-white/10">
-                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest">KEY INDUSTRY CAPABILITY
-                        </div>
+                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest uppercase">Key Industry
+                            Capability</div>
                         <div class="text-sm font-bold mb-1">Critical Infrastructure Monitoring</div>
                         <p class="text-xs text-gray-400">Large-scale LiDAR & Orthophoto acquisition for European power
                             grid expansion and corridor planning.</p>
                     </div>
                 </div>
-                <!-- Placeholder for where a real viewer would go -->
-                <div
-                    class="h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
-                    <span class="tech-font text-xs text-gray-500">[ Interactive Potree Viewer Integration Area ]</span>
+                <!-- Interactive Potree Viewer -->
+                <div class="h-[560px] md:h-[700px] rounded-xl overflow-hidden glass-panel border border-white/10">
+                    <iframe src="/test/lk6/lk.html" class="w-full h-full border-none" title="Potree Viewer"></iframe>
                 </div>
             </div>
         </section>
@@ -175,9 +174,31 @@
         <section id="bathymetry"
             class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
             <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div
-                    class="order-2 md:order-1 h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
-                    <span class="tech-font text-xs text-gray-500">[ Depth Map / 3D Water Mesh Area ]</span>
+                <div class="order-2 md:order-1 space-y-4">
+                    <div class="glass-panel overflow-hidden rounded-xl border border-white/10">
+                        <img src="assets/cross_section.png" alt="Bathymetry Cross Section"
+                            class="w-full h-auto opacity-80 hover:opacity-100 transition duration-500">
+                        <div class="p-4 bg-black/40 backdrop-blur-md">
+                            <span class="tech-font text-[10px] text-gray-400 uppercase">Riverbed Cross-Section
+                                Analysis</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel overflow-hidden rounded-xl border border-white/10 font-bold uppercase">
+                            <img src="assets/15_dsm.jpg" alt="Digital Surface Model"
+                                class="w-full aspect-square object-cover opacity-60 hover:opacity-100 transition duration-500">
+                            <div class="p-2 text-center bg-black/40">
+                                <span class="tech-font text-[9px] text-gray-500">DSM VIEW</span>
+                            </div>
+                        </div>
+                        <div class="glass-panel overflow-hidden rounded-xl border border-white/10 font-bold uppercase">
+                            <img src="assets/16_dtm.jpg" alt="Digital Terrain Model"
+                                class="w-full aspect-square object-cover opacity-60 hover:opacity-100 transition duration-500">
+                            <div class="p-2 text-center bg-black/40">
+                                <span class="tech-font text-[9px] text-gray-500">DTM VIEW</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="glass-panel p-8 md:p-12 order-1 md:order-2">
                     <h2 class="text-3xl font-bold mb-4">BATHYMETRY</h2>
@@ -187,16 +208,17 @@
                     </p>
                     <div class="flex gap-4 mt-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold">ALB</div>
-                            <div class="text-xs text-gray-500">Active Sensors</div>
+                            <div class="text-2xl font-bold underline decoration-[#a2d032]">ALB</div>
+                            <div class="text-[9px] text-gray-500 tech-font uppercase">Active Sensors</div>
                         </div>
-                        <div class="text-center border-l border-gray-700 pl-4">
-                            <div class="text-2xl font-bold">Refract</div>
-                            <div class="text-xs text-gray-500">Correction</div>
+                        <div class="text-center border-l border-white/10 pl-4">
+                            <div class="text-2xl font-bold underline decoration-[#a2d032]">Refract</div>
+                            <div class="text-[9px] text-gray-500 tech-font uppercase">Correction</div>
                         </div>
                     </div>
                     <div class="mt-8 pt-6 border-t border-white/10">
-                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest">HYDROLOGY & DEFENSE</div>
+                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest uppercase">Hydrology &
+                            Defense</div>
                         <div class="text-sm font-bold mb-1">Sub-Surface Target Detection</div>
                         <p class="text-xs text-gray-400">Providing specialized expertise in bathymetric LiDAR for
                             riverbed modeling and underwater object identification.</p>
