@@ -44,8 +44,9 @@
         }
 
         .gradient-text {
-            background: linear-gradient(90deg, #e30613 0%, #003a5d 100%);
+            background: linear-gradient(90deg, #a2d032 0%, #003a5d 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -76,12 +77,13 @@
             <img src="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png"
                 alt="Kabelik Logo" class="h-10 w-auto">
         </a>
-        <div class="hidden md:flex gap-4 text-[10px] font-bold tracking-widest text-[#e30613]">
+        <div class="hidden md:flex gap-4 text-[10px] font-bold tracking-widest text-[#a2d032]">
             <a href="#lidar" class="hover:text-white transition">LIDAR</a>
             <a href="#bathymetry" class="hover:text-white transition">BATHYMETRY</a>
             <a href="#photogrammetry" class="hover:text-white transition">PHOTOGRAMMETRY</a>
             <a href="#web-gis" class="hover:text-white transition">WEB/GIS</a>
             <a href="#it-services" class="hover:text-white transition">IT SERVICES</a>
+            <a href="#projects" class="hover:text-white transition">PROJECTS</a>
             <a href="#about-us" class="hover:text-white transition">ABOUT US</a>
             <a href="#contact" class="hover:text-white transition">CONTACT</a>
         </div>
@@ -96,7 +98,7 @@
         <!-- HERO SECTION -->
         <section class="h-screen flex items-center px-6 md:px-20">
             <div class="max-w-2xl">
-                <div class="tech-font text-[#e30613] text-xs mb-4 tracking-widest">DIGITAL TWIN TECHNOLOGY</div>
+                <div class="tech-font text-[#a2d032] text-xs mb-4 tracking-widest">DIGITAL TWIN TECHNOLOGY</div>
                 <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6">
                     Capture Reality.<br>
                     <span class="gradient-text">Down to the pixel.</span>
@@ -107,7 +109,7 @@
                 </p>
                 <div class="flex gap-4">
                     <button
-                        class="bg-[#e30613] hover:bg-red-700 px-8 py-3 rounded-lg font-medium transition text-white">
+                        class="bg-[#a2d032] hover:bg-[#8ab32a] px-8 py-3 rounded-lg font-medium transition text-white">
                         View Projects
                     </button>
                     <button class="glass-panel px-8 py-3 rounded-lg font-medium hover:bg-white/10 transition">
@@ -120,14 +122,14 @@
             <div class="absolute right-10 bottom-20 glass-panel p-6 w-64 hidden md:block">
                 <div class="flex justify-between text-xs text-gray-400 mb-2">
                     <span>POINTS LOADED</span>
-                    <span class="tech-font text-green-400">14,203,992</span>
+                    <span class="tech-font text-[#a2d032]">14,203,992</span>
                 </div>
                 <div class="flex justify-between text-xs text-gray-400 mb-2">
                     <span>GROUND RES</span>
                     <span class="tech-font">2 cm/px</span>
                 </div>
                 <div class="h-1 w-full bg-gray-700 mt-2 overflow-hidden rounded-full">
-                    <div class="h-full bg-[#e30613] w-2/3"></div>
+                    <div class="h-full bg-[#a2d032] w-2/3"></div>
                 </div>
             </div>
         </section>
@@ -144,15 +146,22 @@
                     </p>
                     <ul class="space-y-3 text-sm text-gray-300">
                         <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[#e30613] rounded-full"></span> 20+ points / m² density
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> 20+ points / m² density
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[#e30613] rounded-full"></span> Full waveform analysis
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Full waveform analysis
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[#e30613] rounded-full"></span> DTM & DSM generation
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> DTM & DSM generation
                         </li>
                     </ul>
+                    <div class="mt-8 pt-6 border-t border-white/10">
+                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest">KEY INDUSTRY CAPABILITY
+                        </div>
+                        <div class="text-sm font-bold mb-1">Critical Infrastructure Monitoring</div>
+                        <p class="text-xs text-gray-400">Large-scale LiDAR & Orthophoto acquisition for European power
+                            grid expansion and corridor planning.</p>
+                    </div>
                 </div>
                 <!-- Placeholder for where a real viewer would go -->
                 <div
@@ -178,13 +187,19 @@
                     </p>
                     <div class="flex gap-4 mt-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold">1.5 P</div>
-                            <div class="text-xs text-gray-500">Secchi Depth</div>
+                            <div class="text-2xl font-bold">ALB</div>
+                            <div class="text-xs text-gray-500">Active Sensors</div>
                         </div>
                         <div class="text-center border-l border-gray-700 pl-4">
-                            <div class="text-2xl font-bold">RGB</div>
-                            <div class="text-xs text-gray-500">Colorized Mesh</div>
+                            <div class="text-2xl font-bold">Refract</div>
+                            <div class="text-xs text-gray-500">Correction</div>
                         </div>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/10">
+                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest">HYDROLOGY & DEFENSE</div>
+                        <div class="text-sm font-bold mb-1">Sub-Surface Target Detection</div>
+                        <p class="text-xs text-gray-400">Providing specialized expertise in bathymetric LiDAR for
+                            riverbed modeling and underwater object identification.</p>
                     </div>
                 </div>
             </div>
@@ -194,17 +209,17 @@
         <section id="photogrammetry"
             class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
             <div class="max-w-3xl mx-auto text-center">
-                <div class="tech-font text-[#e30613] text-xs mb-4">NEXT GEN VISUALIZATION</div>
+                <div class="tech-font text-[#a2d032] text-xs mb-4">NEXT GEN VISUALIZATION</div>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">PHOTOGRAMMETRY</h2>
                 <p class="text-gray-400 text-lg mb-10">
-                    Move beyond static meshes. We convert drone imagery into photorealistic, navigable 3D radiance
-                    fields. Perfect for architectural preservation and construction progress tracking.
+                    Precision Digital Twins an Asset Monitoring. We delivered high-res 3D meshes and Gaussian Splats for
+                    large-scale refinery sites and industrial infrastructure in Germany and beyond.
                 </p>
                 <div class="inline-block glass-panel p-2 rounded-xl">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Terrestrial_laser_scan_of_a_building_interior.jpg/1280px-Terrestrial_laser_scan_of_a_building_interior.jpg"
                         alt="Point Cloud Example"
                         class="rounded-lg opacity-50 grayscale hover:grayscale-0 transition duration-500">
-                    <div class="mt-2 text-xs text-gray-500 tech-font">INTERACTIVE SPLAT PREVIEW</div>
+                    <div class="mt-2 text-xs text-gray-500 tech-font">INDUSTRIAL DIGITAL TWIN (G.SPLATS)</div>
                 </div>
             </div>
         </section>
@@ -216,8 +231,23 @@
                 <div class="glass-panel p-8 md:p-12">
                     <h2 class="text-3xl font-bold mb-4">WEB/GIS</h2>
                     <p class="text-gray-400 mb-6">
-                        Custom web-based GIS solutions for data visualization and spatial analysis.
+                        Custom Geoinformation data handling, conversion and management. We provide high-performance Web
+                        Map Services and pointcloud viewers for seamless data access.
                     </p>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Enterprise Stack: QGIS Server &
+                            PostGIS
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> SaaS Backend: High-Performance GPS
+                            Analytics
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> FttH Deployment: Automated GIS
+                            Workflows
+                        </li>
+                    </ul>
                 </div>
                 <div
                     class="h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
@@ -237,33 +267,227 @@
                 <div class="glass-panel p-8 md:p-12 order-1 md:order-2">
                     <h2 class="text-3xl font-bold mb-4">IT SERVICES</h2>
                     <p class="text-gray-400 mb-6">
-                        Professional IT infrastructure and support tailored for geomatics and high-performance
-                        computing.
+                        Professional IT infrastructure specialized in Linux, Mergin, Postgres (PostGIS), and QGIS Server
+                        ecosystems. We also provide comprehensive Windows administration and support.
                     </p>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Linux (Debian/Ubuntu) & Windows
+                            Expert
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Scalable Cloud Infrastructure
+                            (Nginx/Docker)
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Enterprise Architecture & 24/7
+                            Operations
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS HIGHLIGHTS -->
+        <section id="projects" class="py-20 px-6 md:px-20 border-t border-white/5 bg-white/[0.02]">
+            <div class="max-w-6xl mx-auto">
+                <div class="tech-font text-[#a2d032] text-xs mb-4 tracking-widest text-center">EXCELLENCE IN EXECUTION
+                </div>
+                <h2 class="text-4xl font-bold mb-12 text-center">SELECTED CASE STUDIES</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Project 1 -->
+                    <div class="glass-panel p-6 hover:border-[#a2d032]/50 transition duration-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] bg-[#a2d032]/10 text-[#a2d032] px-2 py-1 rounded">Transmission
+                                Grid</span>
+                        </div>
+                        <h4 class="font-bold mb-2">Power Corridor Monitoring</h4>
+                        <p class="text-xs text-gray-400 mb-4">Operational LiDAR and Orthophoto campaigns for major
+                            European power transmission networks.</p>
+                        <div class="text-[9px] text-gray-500 tech-font uppercase">LiDAR • Orthophoto • Corridor Mapping
+                        </div>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="glass-panel p-6 hover:border-[#a2d032]/50 transition duration-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] bg-[#a2d032]/10 text-[#a2d032] px-2 py-1 rounded">Energy
+                                Sector</span>
+                        </div>
+                        <h4 class="font-bold mb-2">Aerial Infrastructure Thermography</h4>
+                        <p class="text-xs text-gray-400 mb-4">Large-scale thermal monitoring of pipeline networks and
+                            industrial assets for anomaly detection.</p>
+                        <div class="text-[9px] text-gray-500 tech-font uppercase">Thermal Imaging • Asset Management
+                        </div>
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="glass-panel p-6 hover:border-[#a2d032]/50 transition duration-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <span
+                                class="text-[10px] bg-[#a2d032]/10 text-[#a2d032] px-2 py-1 rounded">Sub-Aquatic</span>
+                        </div>
+                        <h4 class="font-bold mb-2">Bathymetric Mine Detection</h4>
+                        <p class="text-xs text-gray-400 mb-4">Expert consulting and R&D for underwater target
+                            identification through LiDAR bathymetry.</p>
+                        <div class="text-[9px] text-gray-500 tech-font uppercase">Bathy-LiDAR • R&D • Defense Tech</div>
+                    </div>
+                    <!-- Project 4 -->
+                    <div class="glass-panel p-6 hover:border-[#a2d032]/50 transition duration-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] bg-[#a2d032]/10 text-[#a2d032] px-2 py-1 rounded">Industry
+                                4.0</span>
+                        </div>
+                        <h4 class="font-bold mb-2">Industrial Facility Digital Twin</h4>
+                        <p class="text-xs text-gray-400 mb-4">Generation of high-precision 3D meshes and Gaussian Splats
+                            for petrochemical complex management.</p>
+                        <div class="text-[9px] text-gray-500 tech-font uppercase">Gaussian Splats • Asset Management
+                        </div>
+                    </div>
+                    <!-- Project 5 -->
+                    <div class="glass-panel p-6 hover:border-[#a2d032]/50 transition duration-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] bg-[#a2d032]/10 text-[#a2d032] px-2 py-1 rounded">IT & GIS</span>
+                        </div>
+                        <h4 class="font-bold mb-2">Fiber-Optic GIS Transformation</h4>
+                        <p class="text-xs text-gray-400 mb-4">Transition of legacy GIS landscapes to high-performance
+                            Open-Source stacks based on PostGIS.</p>
+                        <div class="text-[9px] text-gray-500 tech-font uppercase">QGIS Server • PostGIS • Automation
+                        </div>
+                    </div>
+                    <!-- Project 6 -->
+                    <div class="glass-panel p-6 hover:border-[#a2d032]/50 transition duration-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] bg-[#a2d032]/10 text-[#a2d032] px-2 py-1 rounded">Hydrology</span>
+                        </div>
+                        <h4 class="font-bold mb-2">Riverbed & Sediment Analysis</h4>
+                        <p class="text-xs text-gray-400 mb-4">Merging terrestrial and bathymetric data for seamless
+                            terrain modeling and water management.</p>
+                        <div class="text-[9px] text-gray-500 tech-font uppercase">Terrasolid • LiDAR Bathymetry</div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ABOUT US SECTION -->
-        <section id="about-us"
-            class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
-            <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">ABOUT US</h2>
-                <p class="text-gray-400 text-lg">
-                    Kabelik GmbH is a leader in remote sensing and geomatics, based in Wiener Neustadt, Austria.
-                </p>
+        <section id="about-us" class="py-20 px-6 md:px-20 border-t border-white/5">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-3 gap-12">
+                    <div class="md:col-span-1">
+                        <div class="tech-font text-[#a2d032] text-xs mb-4 tracking-widest">ESTABLISHED EXPERTISE</div>
+                        <h2 class="text-4xl font-bold mb-8">KABELIK GMBH</h2>
+                        <div class="glass-panel p-8">
+                            <p class="text-sm text-gray-400 leading-relaxed italic">
+                                "Bridging the gap between operational aviation experience and cutting-edge
+                                Geoinformatics."
+                            </p>
+                        </div>
+                        <div class="mt-8 space-y-4">
+                            <div class="glass-panel p-6">
+                                <h4
+                                    class="text-[10px] font-bold mb-4 tech-font text-gray-500 uppercase tracking-widest">
+                                    Organizational Core</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span
+                                        class="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] text-gray-400">GmbH
+                                        Entity</span>
+                                    <span
+                                        class="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] text-gray-400">Remote
+                                        Sensing</span>
+                                    <span
+                                        class="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] text-gray-400">Enterprise
+                                        IT</span>
+                                    <span
+                                        class="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] text-gray-400">GIS
+                                        Architecture</span>
+                                    <span
+                                        class="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] text-gray-400">Aviation
+                                        Operations</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-10">
+                        <div>
+                            <p class="text-2xl text-gray-200 leading-tight mb-6">
+                                Professional Remote Sensing, Geomatics, and IT Infrastructure.
+                            </p>
+                            <p class="text-gray-400 leading-relaxed text-sm mb-6">
+                                Kabelik GmbH is a specialized provider of high-end geospatial services and complex IT
+                                infrastructure solutions. Based in Wiener Neustadt, we operate at the intersection of
+                                aerial data acquisition and advanced data processing.
+                            </p>
+                            <p class="text-gray-400 leading-relaxed text-sm">
+                                Our focus lies on the entire value chain of remote sensing: from the strategic planning
+                                and execution of sensor missions to the high-performance processing and refinement of
+                                massive datasets into actionable Business Intelligence. We support industrial partners
+                                and utility providers in managing complex spatial data—efficiently, scalably, and at the
+                                highest technological level.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-12">
+                            <div>
+                                <h4 class="text-[#a2d032] tech-font text-[10px] uppercase tracking-widest mb-6">Service
+                                    Philosophy</h4>
+                                <div class="space-y-6">
+                                    <div class="relative pl-6 border-l border-[#a2d032]/30">
+                                        <div class="absolute -left-[5px] top-0 w-2 h-2 bg-[#a2d032] rounded-full"></div>
+                                        <div class="text-sm font-bold">End-to-End Mission Management</div>
+                                        <p class="text-xs text-gray-400 mt-2">Integrating flight operations with data
+                                            analysis to ensure zero-loss information transfer.</p>
+                                    </div>
+                                    <div class="relative pl-6 border-l border-white/10">
+                                        <div class="text-sm font-bold">Open-Source Excellence</div>
+                                        <p class="text-xs text-gray-400 mt-2">Developing scalable, vendor-independent
+                                            stacks based on QGIS, PostGIS, and Linux.</p>
+                                    </div>
+                                    <div class="relative pl-6 border-l border-white/10">
+                                        <div class="text-sm font-bold">Infrastructure Reliability</div>
+                                        <p class="text-xs text-gray-400 mt-2">Providing enterprise-grade IT environments
+                                            for critical geospatial data processing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-[#a2d032] tech-font text-[10px] uppercase tracking-widest mb-6">
+                                    Certifications & Expertise</h4>
+                                <div class="space-y-6">
+                                    <div class="relative pl-6 border-l border-white/10">
+                                        <div class="text-sm font-bold">Geoinformation Science</div>
+                                        <p class="text-xs text-gray-400">Deep expertise in LiDAR stripping, refraction
+                                            correction, and multi-sensor fusion.</p>
+                                    </div>
+                                    <div class="relative pl-6 border-l border-white/10">
+                                        <div class="text-sm font-bold">IT Management & Strategy</div>
+                                        <p class="text-xs text-gray-400">Systemic approach to ITIL standards, cloud
+                                            architecture, and data security.</p>
+                                    </div>
+                                    <div class="mt-8 pt-8 border-t border-white/5">
+                                        <div class="text-[10px] text-gray-500 tech-font uppercase tracking-widest mb-4">
+                                            Strategic Partners</div>
+                                        <div class="text-[11px] text-gray-400 space-y-2">
+                                            <div>• Airborne Operations Network</div>
+                                            <div>• Open-Source GIS Community</div>
+                                            <div>• High-Performance Computing Partners</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- FOOTER -->
         <footer id="contact" class="py-20 border-t border-white/10 text-center">
             <h2 class="text-2xl font-bold mb-8">Kabelik GmbH</h2>
-            <p class="text-gray-400 mb-8">Remote Sensing | Geomatics | IT Services</p>
+            <div class="text-sm text-gray-400 mb-8 tech-font space-x-4">
+                <a href="mailto:office@kabelik.at" class="hover:text-[#a2d032]">office@kabelik.at</a>
+            </div>
             <div class="text-sm text-gray-600 tech-font">
                 Kabelik GmbH, Merbotogasse 58D<br>
                 2700 Wiener Neustadt<br>
-                AUSTRIA<br>
-                office@kabelik.at
+                AUSTRIA
             </div>
         </footer>
 
@@ -285,8 +509,8 @@
         const vertices = [];
         const colors = [];
 
-        const color1 = new THREE.Color(0xe30613);
-        const color2 = new THREE.Color(0x003a5d);
+        const color1 = new THREE.Color(0xffffff);
+        const color2 = new THREE.Color(0x999999);
 
         for (let i = 0; i < 5000; i++) {
             const x = (Math.random() - 0.5) * 2000;
@@ -295,7 +519,7 @@
             vertices.push(x, y, z);
 
             // Gradient color based on height (Y)
-            const mixedColor = color1.clone().lerp(color2, (y + 1000) / 2000);
+            const mixedColor = color1.clone().lerp(color2, Math.random());
             colors.push(mixedColor.r, mixedColor.g, mixedColor.b);
         }
 
