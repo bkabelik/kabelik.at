@@ -4,43 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Tiles Viewer | Kabelik GmbH</title>
-    <!-- Tailwind CSS for Styling -->
-    <!-- NOTE: Tailwind Play CDN is used for development/demonstration. 
-         For production, a compiled CSS file or Tailwind CLI should be used. -->
+    <title>Kabelik | Global Spatial Viewer</title>
+
+    <!-- Cesium JS -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.125/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.125/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+    <!-- Design -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/png"
         href="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png">
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: #050505;
-            color: white;
-            font-family: 'Inter', sans-serif;
-        }
 
-        #canvas-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+    <style>
+        body,
+        html,
+        #cesium-container {
+            margin: 0;
+            padding: 0;
             width: 100%;
             height: 100%;
+            overflow: hidden;
+            background: #000;
         }
 
         .glass-panel {
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
 
         .tech-font {
             font-family: 'JetBrains Mono', monospace;
+        }
+
+        .cesium-viewer-bottom,
+        .cesium-viewer-animationContainer,
+        .cesium-viewer-timelineContainer {
+            display: none !important;
         }
 
         #loading-overlay {
@@ -49,310 +55,187 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #050505;
+            background: #000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            z-index: 10000;
             transition: opacity 0.8s ease;
         }
 
         .loader {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border: 2px solid #a2d032;
-            border-bottom-color: transparent;
+            border-top-color: transparent;
             border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
-        @keyframes rotation {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
+        @keyframes spin {
+            to {
                 transform: rotate(360deg);
             }
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            background: #a2d032;
-            box-shadow: 0 0 10px #a2d032;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.5);
-                opacity: 0.5;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .nav-link:hover {
-            color: #a2d032;
-            border-color: #a2d032;
+        button:hover {
+            background: rgba(162, 208, 50, 0.1) !important;
+            border-color: rgba(162, 208, 50, 0.5) !important;
         }
     </style>
 </head>
 
 <body>
     <div id="loading-overlay">
-        <span class="loader"></span>
-        <div class="mt-6 tech-font text-[#a2d032] text-[10px] tracking-[0.2em] uppercase">Initializing Spatial Engine
+        <div class="loader"></div>
+        <div class="mt-8 tech-font text-[#a2d032] text-[11px] tracking-[0.4em] uppercase font-bold">System Calibration
         </div>
-        <div class="mt-2 text-gray-500 text-[9px] uppercase tracking-widest" id="loading-status">Connecting to Remote
-            Tileset...</div>
+        <div id="loading-status"
+            class="mt-2 text-gray-500 text-[9px] uppercase tracking-widest font-bold animate-pulse">Establishing Geoid
+            Offset (-44m)...</div>
     </div>
 
-    <div id="canvas-container"></div>
+    <div id="cesium-container"></div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none">
+    <!-- Top Overlay -->
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-[5000] pointer-events-none">
         <div class="pointer-events-auto">
             <a href="index.html"
-                class="glass-panel px-5 py-2 flex items-center gap-3 border border-white/10 hover:border-[#a2d032]/40 transition group">
-                <span
-                    class="text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 group-hover:text-white transition">←
-                    Return to Main Portal</span>
+                class="glass-panel px-5 py-2.5 text-[10px] uppercase font-bold text-gray-400 hover:text-[#a2d032] transition flex items-center gap-2">
+                <span>←</span> Portal
             </a>
         </div>
-        <div class="glass-panel px-6 py-3 flex items-center gap-4 border border-white/10 pointer-events-auto">
-            <img src="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png"
-                alt="Kabelik Logo" class="h-6 w-auto">
-            <div class="h-4 w-[1px] bg-white/20"></div>
-            <div class="flex flex-col">
-                <span class="tech-font text-[10px] text-[#a2d032] font-bold uppercase tracking-widest leading-none">3D
-                    Tiles Renderer</span>
-                <span class="text-[8px] text-gray-500 uppercase tracking-widest mt-1">Real-time Visualization</span>
+        <div class="glass-panel px-6 py-4 flex items-center gap-6 pointer-events-auto">
+            <div class="flex flex-col text-right">
+                <div class="flex items-center gap-2 justify-end">
+                    <div class="w-2 h-2 bg-[#a2d032] rounded-full shadow-[0_0_10px_#a2d032]"></div>
+                    <span class="tech-font text-[11px] text-[#a2d032] font-bold uppercase tracking-widest">WGS84
+                        Correction Active</span>
+                </div>
+                <span id="loc-display" class="text-[9px] text-gray-500 uppercase tracking-widest font-medium">Austria
+                    Geospatial Sector</span>
             </div>
+            <img src="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png" alt="Logo"
+                class="h-8">
         </div>
     </nav>
 
-    <!-- Controls / Info -->
-    <div class="fixed bottom-6 left-6 glass-panel p-5 w-72 border border-white/10">
-        <div class="flex items-center gap-2 mb-4">
-            <span class="status-dot"></span>
-            <span class="tech-font text-[10px] uppercase font-bold tracking-widest">System Status: Active</span>
-        </div>
-
-        <div class="space-y-3">
-            <div class="flex justify-between items-end">
-                <span class="text-[9px] text-gray-400 uppercase tracking-widest">Active Tiles</span>
-                <span id="tiles-count" class="tech-font text-[#a2d032] text-xs">0</span>
-            </div>
-            <div class="h-[2px] w-full bg-white/5 overflow-hidden rounded-full">
-                <div id="tiles-progress" class="h-full bg-[#a2d032]/40 w-0 transition-all duration-500"></div>
-            </div>
-
-            <div class="flex justify-between items-end pt-2">
-                <span class="text-[9px] text-gray-400 uppercase tracking-widest">Memory Cache</span>
-                <span id="mem-usage" class="tech-font text-gray-300 text-xs text-right">0 MB</span>
-            </div>
-
-            <div class="mt-4 pt-4 border-t border-white/5">
-                <div class="text-[8px] text-gray-500 tech-font uppercase tracking-widest mb-2 text-center">Navigation
-                    Controls</div>
-                <div class="grid grid-cols-2 gap-2 text-[8px] text-gray-400 uppercase tracking-tighter">
-                    <div class="glass-panel px-2 py-1 flex justify-between"><span>Rotate</span><span
-                            class="text-[#a2d032]">Left Click</span></div>
-                    <div class="glass-panel px-2 py-1 flex justify-between"><span>Pan</span><span
-                            class="text-[#a2d032]">Right Click</span></div>
-                    <div class="glass-panel px-2 py-1 flex justify-between"><span>Zoom</span><span
-                            class="text-[#a2d032]">Scroll</span></div>
+    <!-- Bottom Controls -->
+    <div class="fixed bottom-8 left-8 glass-panel p-6 w-72 z-[5000] pointer-events-auto">
+        <div class="space-y-5">
+            <div>
+                <div class="flex justify-between text-[11px] text-gray-500 uppercase tracking-widest mb-2 font-bold">
+                    <span>Altitude</span>
+                    <span id="alt-val" class="text-white tech-font">---</span>
                 </div>
+                <div class="h-[1px] w-full bg-white/10"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="zoomToScan()"
+                    class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-[#a2d032] border-[#a2d032]/30 transition-all">Refocus</button>
+                <button onclick="toggleMap()" id="map-btn"
+                    class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-white border-white/20 transition-all">Ground:
+                    ON</button>
             </div>
         </div>
     </div>
 
-    <!-- Attribution -->
-    <div class="fixed bottom-6 right-6">
-        <div class="glass-panel px-4 py-2 border border-white/5 text-[9px] text-gray-500 tracking-widest uppercase">
-            Captured with <span class="text-gray-300">RealityScan</span> | Powered by <span
-                class="text-[#a2d032]">NASA-AMMOS</span>
-        </div>
-    </div>
+    <script>
+        // Use a rock-solid, direct URL for OSM to avoid any "provider" abstraction issues
+        const osmLayer = new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            maximumLevel: 19,
+            credit: '© OpenStreetMap contributors'
+        }));
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
-                "three/examples/jsm/": "https://unpkg.com/three@0.170.0/examples/jsm/",
-                "3d-tiles-renderer": "https://unpkg.com/3d-tiles-renderer@0.4.21/build/index.three.js"
-            }
-        }
-    </script>
+        const viewer = new Cesium.Viewer('cesium-container', {
+            imageryProvider: false, // Start empty so we can manually control the layer
+            baseLayerPicker: false,
+            geocoder: false,
+            homeButton: false,
+            sceneModePicker: false,
+            navigationHelpButton: false,
+            animation: false,
+            timeline: false,
+            fullscreenButton: false,
+            selectionIndicator: false,
+            infoBox: false,
+            scene3DOnly: true,
+            shadows: false,
+            skyAtmosphere: false,
+            requestRenderMode: false
+        });
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-        import { TilesRenderer } from '3d-tiles-renderer';
+        // Add the layer manually and keep a reference
+        viewer.imageryLayers.add(osmLayer);
 
-        let scene, camera, renderer, controls, tilesRenderer;
-        const tilesCountEl = document.getElementById('tiles-count');
-        const memUsageEl = document.getElementById('mem-usage');
-        const progressEl = document.getElementById('tiles-progress');
-        const statusEl = document.getElementById('loading-status');
+        // Core Environment Stability
+        viewer.scene.globe.show = true;
+        viewer.scene.globe.depthTestAgainstTerrain = false; // Model won't sink into ground
+        viewer.scene.atmosphere.dynamicLighting = Cesium.DynamicAtmosphereLightingType.OFF;
 
-        const TILESET_URL = '../strips_online/tileset.json';
+        let currentTileset = null;
 
-        // Global Error Tracker
-        window.onerror = (e) => {
-            console.error('CRITICAL ERROR:', e);
-            statusEl.innerText = 'Initialization Error: ' + e;
-            statusEl.style.color = '#ff4444';
-        };
-
-        init();
-        animate();
-
-        async function init() {
-            console.log('Verifying tileset availability at:', TILESET_URL);
+        async function setupTileset() {
             try {
-                const res = await fetch(TILESET_URL);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                console.log('Tileset JSON reached successfully.');
-                statusEl.innerText = 'Parsing Tileset Architecture...';
-            } catch (e) {
-                console.error('Cannot access tileset.json:', e);
-                statusEl.innerText = 'Error: Cannot load tileset.json';
-                return;
-            }
-
-            // Scene Setup
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x050505);
-
-            // Camera Setup - Huge far plane for RealityScan UTM systems
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000000);
-            camera.position.set(1000, 1000, 1000);
-
-            // Renderer Setup
-            renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-            // Controls Setup
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-
-            // Lighting
-            scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-
-            // Tiles Renderer
-            tilesRenderer = new TilesRenderer(TILESET_URL);
-            tilesRenderer.setCamera(camera);
-            tilesRenderer.setResolutionFromRenderer(camera, renderer);
-
-            // Draco & GLTF Support
-            const dracoLoader = new DRACOLoader();
-            dracoLoader.setDecoderPath('https://unpkg.com/three@0.170.0/examples/jsm/libs/draco/gltf/');
-
-            const gltfLoader = new GLTFLoader(tilesRenderer.manager);
-            gltfLoader.setDRACOLoader(dracoLoader);
-            tilesRenderer.manager.addHandler(/\.(gltf|glb)$/g, gltfLoader);
-
-            // Root Loading Logic
-            tilesRenderer.addEventListener('load-root-tileset', () => {
-                console.log('Root Tileset Event Fired');
-                statusEl.innerText = 'Calculating Spatial Coordinates...';
-
-                const sphere = new THREE.Sphere();
-                tilesRenderer.getBoundingSphere(sphere);
-
-                console.log('Bounding Sphere Details:', {
-                    center: sphere.center,
-                    radius: sphere.radius
+                const tileset = await Cesium.Cesium3DTileset.fromUrl('../strips_online/tileset.json', {
+                    maximumScreenSpaceError: 16
                 });
 
-                if (sphere.radius > 0) {
-                    // Recenter the entire model group to local 0,0,0 to fix precision issues
-                    tilesRenderer.group.position.copy(sphere.center).multiplyScalar(-1);
+                viewer.scene.primitives.add(tileset);
+                currentTileset = tileset;
 
-                    const dist = sphere.radius * 2.2;
-                    camera.position.set(dist, dist, dist);
-                    controls.target.set(0, 0, 0);
-                    controls.update();
-                } else {
-                    console.warn('Empty bounding sphere detected initially.');
-                }
+                // --- APPLY -44m VERTICAL CORRECTION ---
+                const center = tileset.boundingSphere.center;
+                const carto = Cesium.Cartographic.fromCartesian(center);
+                carto.height -= 44.0; // Correct ellipsoid-to-geoid gap for Austria
 
-                setTimeout(hideLoadingScreen, 500);
-            });
+                const targetPos = Cesium.Cartographic.toCartesian(carto);
+                const translation = Cesium.Cartesian3.subtract(targetPos, center, new Cesium.Cartesian3());
+                tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
 
-            // Model Loading Logic
-            tilesRenderer.addEventListener('load-model', () => {
-                console.group('Tile Model Load');
-                console.log('New tile mesh integrated into Three.js scene');
-                console.groupEnd();
-                hideLoadingScreen();
-            });
+                // Initial Zoom
+                viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-35), 220));
 
-            // Manager Debugging
-            tilesRenderer.manager.onStart = (url) => console.log('Asset fetching started:', url);
-            tilesRenderer.manager.onError = (url) => {
-                console.error('Asset Load FAult:', url);
-                statusEl.innerText = 'Fault detected in asset delivery';
-            };
+                const latStr = Cesium.Math.toDegrees(carto.latitude).toFixed(5);
+                const lonStr = Cesium.Math.toDegrees(carto.longitude).toFixed(5);
+                document.getElementById('loc-display').innerText = `${latStr}N, ${lonStr}E (Restored)`;
 
-            scene.add(tilesRenderer.group);
-            window.addEventListener('resize', onWindowResize);
-        }
+                setTimeout(() => {
+                    const overlay = document.getElementById('loading-overlay');
+                    if (overlay) {
+                        overlay.style.opacity = '0';
+                        setTimeout(() => overlay.style.display = 'none', 1000);
+                    }
+                }, 1000);
 
-        function hideLoadingScreen() {
-            const overlay = document.getElementById('loading-overlay');
-            if (overlay && overlay.style.display !== 'none') {
-                overlay.style.opacity = '0';
-                setTimeout(() => { overlay.style.display = 'none'; }, 800);
+            } catch (error) {
+                console.error('Tileset Load Error:', error);
+                document.getElementById('loading-status').innerText = "Correction Link Fault";
             }
         }
 
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            tilesRenderer.setResolutionFromRenderer(camera, renderer);
-        }
+        setupTileset();
 
-        function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            if (tilesRenderer) {
-                camera.updateMatrixWorld();
-                tilesRenderer.update();
-                updateHUD();
+        // Update Altitude in HUD
+        viewer.scene.postRender.addEventListener(function () {
+            if (viewer.camera.positionCartographic) {
+                const h = viewer.camera.positionCartographic.height;
+                document.getElementById('alt-val').innerText = h > 1000 ? (h / 1000).toFixed(1) + ' km' : Math.round(h) + ' m';
             }
-            if (renderer && scene && camera) renderer.render(scene, camera);
+        });
+
+        function zoomToScan() {
+            if (currentTileset) {
+                viewer.zoomTo(currentTileset, new Cesium.HeadingPitchRange(viewer.camera.heading, Cesium.Math.toRadians(-45), 180));
+            }
         }
 
-        function updateHUD() {
-            if (!tilesRenderer || !tilesRenderer.visibleTiles) return;
-            const count = tilesRenderer.visibleTiles.size;
-            tilesCountEl.innerText = count;
-            progressEl.style.width = `${Math.min(100, (count / 15) * 100)}%`;
-            memUsageEl.innerText = `${Math.round(count * 4)} MB`;
+        function toggleMap() {
+            // Simplified toggle to avoid 'undefined' errors
+            osmLayer.show = !osmLayer.show;
+            document.getElementById('map-btn').innerText = `Ground: ${osmLayer.show ? 'ON' : 'OFF'}`;
         }
     </script>
 </body>
