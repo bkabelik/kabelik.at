@@ -123,13 +123,22 @@
 
     <!-- Bottom Controls -->
     <div class="fixed bottom-8 left-8 glass-panel p-6 w-72 z-[5000] pointer-events-auto">
-        <div class="space-y-5">
+        <div class="space-y-4">
             <div>
-                <div class="flex justify-between text-[11px] text-gray-500 uppercase tracking-widest mb-2 font-bold">
+                <div class="flex justify-between text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 font-bold">
                     <span>Altitude</span>
                     <span id="alt-val" class="text-white tech-font">---</span>
                 </div>
                 <div class="h-[1px] w-full bg-white/10"></div>
+            </div>
+            <div class="space-y-2">
+                <div class="flex justify-between text-[11px] text-gray-500 uppercase tracking-widest font-bold">
+                    <span>Elevation Offset</span>
+                    <span id="offset-val" class="text-[#a2d032] tech-font">-44m</span>
+                </div>
+                <input type="range" id="elevation-slider" min="-2500" max="2500" value="-44" step="1"
+                    class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#a2d032]"
+                    oninput="updateElevation(this.value)">
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="zoomToScan()"
@@ -140,9 +149,10 @@
             </div>
         </div>
     </div>
+    </div>
 
     <script>
-        // Use a rock-solid, direct URL for OSM to avoid any "provider" abstraction issues
+        // Use a rock-solid, direct URL for OSM
         const osmLayer = new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             maximumLevel: 19,
@@ -150,7 +160,7 @@
         }));
 
         const viewer = new Cesium.Viewer('cesium-container', {
-            imageryProvider: false, // Start empty so we can manually control the layer
+            imageryProvider: false,
             baseLayerPicker: false,
             geocoder: false,
             homeButton: false,
@@ -167,15 +177,20 @@
             requestRenderMode: false
         });
 
-        // Add the layer manually and keep a reference
         viewer.imageryLayers.add(osmLayer);
 
         // Core Environment Stability
         viewer.scene.globe.show = true;
-        viewer.scene.globe.depthTestAgainstTerrain = false; // Model won't sink into ground
-        viewer.scene.atmosphere.dynamicLighting = Cesium.DynamicAtmosphereLightingType.OFF;
+        viewer.scene.globe.depthTestAgainstTerrain = false;
+
+        // --- ADD LIGHTING ---
+        // Ensuring the model is illuminated from an "Overhead Sun" position
+        viewer.scene.light = new Cesium.DirectionalLight({
+            direction: new Cesium.Cartesian3(0.5, -0.2, -1.0)
+        });
 
         let currentTileset = null;
+        let baseCenter = null;
 
         async function setupTileset() {
             try {
@@ -185,22 +200,18 @@
 
                 viewer.scene.primitives.add(tileset);
                 currentTileset = tileset;
+                baseCenter = tileset.boundingSphere.center.clone();
 
-                // --- APPLY -44m VERTICAL CORRECTION ---
-                const center = tileset.boundingSphere.center;
-                const carto = Cesium.Cartographic.fromCartesian(center);
-                carto.height -= 44.0; // Correct ellipsoid-to-geoid gap for Austria
-
-                const targetPos = Cesium.Cartographic.toCartesian(carto);
-                const translation = Cesium.Cartesian3.subtract(targetPos, center, new Cesium.Cartesian3());
-                tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+                // Apply initial -44m offset
+                updateElevation(-44);
 
                 // Initial Zoom
                 viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-35), 220));
 
+                const carto = Cesium.Cartographic.fromCartesian(baseCenter);
                 const latStr = Cesium.Math.toDegrees(carto.latitude).toFixed(5);
                 const lonStr = Cesium.Math.toDegrees(carto.longitude).toFixed(5);
-                document.getElementById('loc-display').innerText = `${latStr}N, ${lonStr}E (Restored)`;
+                document.getElementById('loc-display').innerText = `${latStr}N, ${lonStr}E (Active)`;
 
                 setTimeout(() => {
                     const overlay = document.getElementById('loading-overlay');
@@ -212,13 +223,25 @@
 
             } catch (error) {
                 console.error('Tileset Load Error:', error);
-                document.getElementById('loading-status').innerText = "Correction Link Fault";
             }
+        }
+
+        function updateElevation(value) {
+            if (!currentTileset || !baseCenter) return;
+
+            const offset = parseFloat(value);
+            document.getElementById('offset-val').innerText = offset + 'm';
+
+            const carto = Cesium.Cartographic.fromCartesian(baseCenter);
+            carto.height += offset;
+
+            const targetPos = Cesium.Cartographic.toCartesian(carto);
+            const translation = Cesium.Cartesian3.subtract(targetPos, baseCenter, new Cesium.Cartesian3());
+            currentTileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
         }
 
         setupTileset();
 
-        // Update Altitude in HUD
         viewer.scene.postRender.addEventListener(function () {
             if (viewer.camera.positionCartographic) {
                 const h = viewer.camera.positionCartographic.height;
@@ -233,7 +256,6 @@
         }
 
         function toggleMap() {
-            // Simplified toggle to avoid 'undefined' errors
             osmLayer.show = !osmLayer.show;
             document.getElementById('map-btn').innerText = `Ground: ${osmLayer.show ? 'ON' : 'OFF'}`;
         }
