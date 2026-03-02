@@ -178,10 +178,22 @@
         });
 
         viewer.imageryLayers.add(osmLayer);
+        async function initTerrain() {
+            try {
+                // Lädt die layer.json aus deinem ./terrain Ordner
+                const terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl('./terrain', {
+                    requestVertexNormals: true // Ermöglicht korrektes Shading auf dem Gelände
+                });
+                viewer.terrainProvider = terrainProvider;
+            } catch (error) {
+                console.error("Fehler beim Laden des lokalen Geländes:", error);
+            }
+        }
+        initTerrain();
 
         // Core Environment Stability
         viewer.scene.globe.show = true;
-        viewer.scene.globe.depthTestAgainstTerrain = false;
+        viewer.scene.globe.depthTestAgainstTerrain = true;
 
         // --- ADD LIGHTING ---
         // Ensuring the model is illuminated from an "Overhead Sun" position
@@ -203,7 +215,7 @@
                 baseCenter = tileset.boundingSphere.center.clone();
 
                 // Apply initial -44m offset
-                updateElevation(-44);
+                updateElevation(0);
 
                 // Initial Zoom
                 viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-35), 220));
