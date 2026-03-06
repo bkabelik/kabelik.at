@@ -231,21 +231,42 @@
             </div>
         </section>
 
-        <!-- GAUSSIAN SPLATTING SECTION -->
+        <!-- PHOTOGRAMMETRY SECTION -->
         <section id="photogrammetry"
             class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
-            <div class="max-w-3xl mx-auto text-center">
-                <div class="tech-font text-[#a2d032] text-xs mb-4">NEXT GEN VISUALIZATION</div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">PHOTOGRAMMETRY</h2>
-                <p class="text-gray-400 text-lg mb-10">
-                    Precision Digital Twins an Asset Monitoring. We delivered high-res 3D meshes and Gaussian Splats for
-                    large-scale refinery sites and industrial infrastructure in Germany and beyond.
-                </p>
-                <div class="inline-block glass-panel p-2 rounded-xl">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Terrestrial_laser_scan_of_a_building_interior.jpg/1280px-Terrestrial_laser_scan_of_a_building_interior.jpg"
-                        alt="Point Cloud Example"
-                        class="rounded-lg opacity-50 grayscale hover:grayscale-0 transition duration-500">
-                    <div class="mt-2 text-xs text-gray-500 tech-font">INDUSTRIAL DIGITAL TWIN (G.SPLATS)</div>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="glass-panel p-8 md:p-12">
+                    <div class="tech-font text-[#a2d032] text-xs mb-4">NEXT GEN VISUALIZATION</div>
+                    <h2 class="text-3xl font-bold mb-4">PHOTOGRAMMETRY</h2>
+                    <p class="text-gray-400 mb-6">
+                        Precision Digital Twins and Asset Monitoring. We deliver high-resolution 3D meshes and 3D Tiles
+                        for
+                        large-scale industrial infrastructure, refineries, and heritage sites, georeferenced to
+                        sub-centimeter accuracy.
+                    </p>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Sub-centimeter accuracy &
+                            Georeferencing
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> High-fidelity 3D Reconstruction
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Seamless Web Integration (3D Tiles)
+                        </li>
+                    </ul>
+                    <div class="mt-8 pt-6 border-t border-white/10">
+                        <div class="text-[10px] text-[#a2d032] tech-font mb-2 tracking-widest uppercase">Latest
+                            Technology</div>
+                        <div class="text-sm font-bold mb-1">Industrial Digital Twins</div>
+                        <p class="text-xs text-gray-400">Complete spatial reconstruction of complex industrial plants
+                            for planning, maintenance, and virtual site visits.</p>
+                    </div>
+                </div>
+                <!-- Interactive 3D Tiles Viewer -->
+                <div class="h-[560px] md:h-[700px] rounded-xl overflow-hidden glass-panel border border-white/10">
+                    <iframe src="3dtiles.html" class="w-full h-full border-none" title="3D Tiles Viewer"></iframe>
                 </div>
             </div>
         </section>

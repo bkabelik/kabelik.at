@@ -152,6 +152,12 @@
     </div>
 
     <script>
+        // Hide return button if inside iframe
+        if (window.self !== window.top) {
+            const portalBtn = document.querySelector('a[href="index.html"]');
+            if (portalBtn) portalBtn.parentElement.style.display = 'none';
+        }
+
         // Use a rock-solid, direct URL for OSM
         const osmLayer = new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
