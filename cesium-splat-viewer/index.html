@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <title>Cesium Gaussian Splat Viewer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    
+    <script src="./ThirdParty/Cesium/Cesium.js"></script>
+    <link href="./ThirdParty/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        html, body, #cesiumContainer { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background: #000; }
+        .glass-panel { background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; pointer-events: auto; }
+        .tech-font { font-family: 'JetBrains Mono', monospace; }
+        .cesium-viewer-bottom, .cesium-viewer-animationContainer, .cesium-viewer-timelineContainer { display: none !important; }
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.8s ease; }
+        .loader { width: 44px; height: 44px; border: 2px solid #a2d032; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        input[type=range] { width: 100%; accent-color: #a2d032; }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <div class="mt-8 tech-font text-[#a2d032] text-[11px] tracking-[0.4em] uppercase font-bold">Initializing Splat Engine</div>
+        <div id="loading-status" class="mt-2 text-gray-500 text-[9px] uppercase tracking-widest font-bold animate-pulse">Loading Terrain & Tileset...</div>
+    </div>
+
+    <div id="cesiumContainer"></div>
+
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-[5000] pointer-events-none">
+        <div class="pointer-events-auto">
+            <div class="glass-panel px-5 py-2.5 text-[10px] uppercase font-bold text-gray-400">Gaussian Splat Calibration</div>
+        </div>
+        <div class="glass-panel px-6 py-4 pointer-events-auto text-right">
+            <div class="flex items-center gap-2 justify-end">
+                <div class="w-2 h-2 bg-[#a2d032] rounded-full shadow-[0_0_10px_#a2d032]"></div>
+                <span class="tech-font text-[11px] text-[#a2d032] font-bold tracking-widest uppercase">Active</span>
+            </div>
+            <div id="loc-display" class="text-[9px] text-gray-500 uppercase tracking-widest font-medium mt-1">Coordinate Sync...</div>
+        </div>
+    </nav>
+
+    <div class="fixed bottom-8 left-8 glass-panel p-6 w-80 z-[5000] pointer-events-auto">
+        <div class="space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10 gap-2">
+                <span class="text-[11px] text-gray-400 uppercase tracking-widest font-bold">Tools</span>
+                <div class="flex gap-2">
+                    <button onclick="togglePlaceMode()" id="place-btn" class="px-3 py-1 rounded text-[9px] uppercase font-bold tracking-tighter border border-[#a2d032] text-[#a2d032] hover:bg-[#a2d032] hover:text-black transition-all">Place: OFF</button>
+                    <button onclick="toggleMeasurementMode()" id="measure-btn" class="px-3 py-1 rounded text-[9px] uppercase font-bold tracking-tighter border border-[#a2d032] text-[#a2d032] hover:bg-[#a2d032] hover:text-black transition-all">Measure: OFF</button>
+                </div>
+            </div>
+
+            <div id="measure-output" class="hidden space-y-2 bg-black/40 p-3 rounded border border-white/5">
+                <div class="text-[9px] text-gray-500 uppercase font-bold tracking-widest">Cartesian (X,Y,Z)</div>
+                <div id="xyz-display" class="tech-font text-[10px] text-[#a2d032] break-all leading-tight">Click on map...</div>
+                <div class="flex justify-between items-end mt-2">
+                    <div>
+                        <div class="text-[9px] text-gray-500 uppercase font-bold tracking-widest">Distance</div>
+                        <div id="dist-display" class="tech-font text-[12px] text-white font-bold">0.00 m</div>
+                    </div>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <div class="text-[9px] text-[#a2d032] uppercase font-bold tracking-widest mb-1">Matrix Shift (P2 - P1)</div>
+                    <div id="delta-display" class="tech-font text-[10px] text-white bg-white/5 p-2 rounded leading-relaxed">Wait for 2 clicks...</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between text-[11px] text-gray-500 uppercase tracking-widest mb-1.5 font-bold">
+                    <span>Camera Alt</span>
+                    <span id="alt-val" class="text-white tech-font">---</span>
+                </div>
+                <div class="h-[1px] w-full bg-white/10"></div>
+            </div>
+
+            <div class="space-y-1">
+                <div class="flex justify-between text-[10px] text-gray-500 uppercase font-bold"><span>Elevation (Z)</span> <span id="offset-val" class="text-[#a2d032] tech-font">0m</span></div>
+                <input type="range" id="elevation-slider" min="-3000" max="3000" value="0" step="1" oninput="updateCalibration()">
+            </div>
+
+            <div class="space-y-1">
+                <div class="flex justify-between text-[10px] text-gray-500 uppercase font-bold"><span>Lat Shift (N/S)</span> <span id="lat-val" class="text-[#a2d032] tech-font">0.00000</span></div>
+                <input type="range" id="lat-slider" min="-0.02" max="0.02" value="0" step="0.00001" oninput="updateCalibration()">
+            </div>
+
+            <div class="space-y-1">
+                <div class="flex justify-between text-[10px] text-gray-500 uppercase font-bold"><span>Lon Shift (E/W)</span> <span id="lon-val" class="text-[#a2d032] tech-font">0.00000</span></div>
+                <input type="range" id="lon-slider" min="-0.02" max="0.02" value="0" step="0.00001" oninput="updateCalibration()">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2 border-b border-white/5 pb-3">
+                <button onclick="zoomToScan()" class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-[#a2d032] hover:bg-[#a2d032]/10 transition-all">Refocus</button>
+                <button onclick="toggleMap()" id="map-btn" class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-white hover:bg-white/10 transition-all">Ground: ON</button>
+            </div>
+            
+            <div class="flex gap-2">
+                <button onclick="undoLastPoint()" class="w-1/2 py-2 text-[8px] uppercase text-gray-400 hover:text-white transition-colors bg-white/5 rounded">Undo Point</button>
+                <button onclick="clearMeasurements()" class="w-1/2 py-2 text-[8px] uppercase text-gray-400 hover:text-red-400 transition-colors bg-white/5 rounded">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.CESIUM_BASE_URL = "./ThirdParty/Cesium/";
+        
+        // --- GLOBALS ---
+        let viewer;
+        let splatTileset;
+        let osmLayer;
+        let baseCenter = null;
+        let originalModelCenter = null;
+
+        // --- APP INITIALIZATION ---
+        viewer = new Cesium.Viewer('cesiumContainer', {
+            imageryProvider: false, baseLayerPicker: false, geocoder: false, homeButton: false,
+            sceneModePicker: false, navigationHelpButton: false, animation: false, timeline: false,
+            fullscreenButton: false, selectionIndicator: false, infoBox: false, scene3DOnly: true,
+            shadows: false, skyAtmosphere: false,
+            requestRenderMode: true,             // Render only when something changes
+            maximumRenderTimeChange: Infinity    // Don't render just because time passed
+        });
+
+        osmLayer = new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maximumLevel: 19, credit: '© OpenStreetMap'
+        }));
+        viewer.imageryLayers.add(osmLayer);
+        viewer.scene.globe.show = true;
+        viewer.scene.globe.depthTestAgainstTerrain = true;
+
+
+        async function startApp() {
+            setTimeout(hideLoader, 1500); 
+            try {
+                const terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl('https://dev.kabelik.at/kabelik.at/terrain/', { requestVertexNormals: true });
+                viewer.terrainProvider = terrainProvider;
+            } catch (e) { console.warn("Terrain failed."); }
+            
+            try {
+                const url = 'https://dev.kabelik.at/kabelik.at/cesium-splat-viewer/data/3dtiles/model/tileset.json';
+                splatTileset = await Cesium.Cesium3DTileset.fromUrl(url, { maximumScreenSpaceError: 256, backFaceCulling: true,  progressiveResolutionHeightFraction: 0.5, preloadFlightDestinations: false, preferLeaves: false,foveatedScreenSpaceError: true, foveatedConeSize: 0.3, immediatelyLoadDesiredLevelOfDetail: false, skipLevelOfDetail: true, baseScreenSpaceError: 1024, skipScreenSpaceErrorFactor: 16, skipLevels: 1 });
+                viewer.scene.primitives.add(splatTileset);
+                
+                // Store initial centers
+                baseCenter = splatTileset.boundingSphere.center.clone();
+                originalModelCenter = baseCenter.clone();
+                
+                updateCalibration(); 
+                viewer.zoomTo(splatTileset, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-35), 2500));
+                hideLoader();
+            } catch (e) { document.getElementById('loading-status').innerText = "Splat Load Failed"; }
+        }
+
+        function hideLoader() {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) { overlay.style.opacity = '0'; setTimeout(() => overlay.style.display = 'none', 1000); }
+        }
+
+        // 1. Tell the camera to only fire the 'changed' event if it moves by 1%
+        viewer.camera.percentageChanged = 0.01; 
+
+        // 2. Use the camera's own 'changed' event instead of the render loop
+        viewer.camera.changed.addEventListener(function () {
+            if (viewer.camera.positionCartographic) {
+                const h = viewer.camera.positionCartographic.height;
+                const altVal = document.getElementById('alt-val');
+                if (altVal) {
+                    altVal.innerText = h > 1000 ? (h / 1000).toFixed(1) + ' km' : Math.round(h) + ' m';
+                }
+            }
+        });
+
+        // --- UI & CALIBRATION LOGIC ---
+        window.updateCalibration = function() {
+            if (!splatTileset || !originalModelCenter || !baseCenter) return;
+
+            const hOffset = parseFloat(document.getElementById('elevation-slider').value || 0);
+            const latOffset = parseFloat(document.getElementById('lat-slider').value || 0);
+            const lonOffset = parseFloat(document.getElementById('lon-slider').value || 0);
+
+            document.getElementById('offset-val').innerText = hOffset + 'm';
+            document.getElementById('lat-val').innerText = latOffset.toFixed(5);
+            document.getElementById('lon-val').innerText = lonOffset.toFixed(5);
+
+            const carto = Cesium.Cartographic.fromCartesian(baseCenter);
+            carto.height += hOffset;
+            carto.latitude += latOffset;
+            carto.longitude += lonOffset;
+
+            const finalTargetPos = Cesium.Cartographic.toCartesian(carto);
+            const translation = Cesium.Cartesian3.subtract(finalTargetPos, originalModelCenter, new Cesium.Cartesian3());
+            splatTileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+
+            document.getElementById('loc-display').innerText = `${Cesium.Math.toDegrees(carto.latitude).toFixed(5)}N, ${Cesium.Math.toDegrees(carto.longitude).toFixed(5)}E`;
+        };
+
+        window.zoomToScan = function() { if (splatTileset) viewer.zoomTo(splatTileset); };
+        window.toggleMap = function() { osmLayer.show = !osmLayer.show; document.getElementById('map-btn').innerText = `Ground: ${osmLayer.show ? 'ON' : 'OFF'}`; };
+
+        // --- TOOLS LOGIC ---
+        let isMeasuring = false; let isPlacing = false;
+        let measureHandler = null; let placeHandler = null;
+        let activePoints = []; let activeEntities = [];
+
+        window.togglePlaceMode = function() {
+            if (!originalModelCenter) return alert("Wait for model to load.");
+            isPlacing = !isPlacing;
+            const btn = document.getElementById('place-btn');
+            
+            if (isMeasuring && isPlacing) window.toggleMeasurementMode();
+
+            if (isPlacing) {
+                btn.innerText = "Place: ON"; btn.style.background = "#a2d032"; btn.style.color = "#000";
+                viewer.scene.screenSpaceCameraController.enableInputs = false;
+                
+                placeHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+                placeHandler.setInputAction(function(movement) {
+                    let cartesian = viewer.scene.pickPosition(movement.position);
+                    if (!Cesium.defined(cartesian)) {
+                        const ray = viewer.camera.getPickRay(movement.position);
+                        cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+                    }
+                    if (Cesium.defined(cartesian)) {
+                        baseCenter = cartesian.clone();
+                        document.getElementById('lat-slider').value = 0; document.getElementById('lon-slider').value = 0; document.getElementById('elevation-slider').value = 0;
+                        updateCalibration();
+                    }
+                }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            } else {
+                btn.innerText = "Place: OFF"; btn.style.background = "transparent"; btn.style.color = "#a2d032";
+                viewer.scene.screenSpaceCameraController.enableInputs = true;
+                if(placeHandler) placeHandler.destroy();
+            }
+        };
+
+        window.toggleMeasurementMode = function() {
+            isMeasuring = !isMeasuring;
+            const btn = document.getElementById('measure-btn');
+            const output = document.getElementById('measure-output');
+            
+            if (isPlacing && isMeasuring) window.togglePlaceMode();
+            
+            if (isMeasuring) {
+                btn.innerText = "Measure: ON"; btn.style.background = "#a2d032"; btn.style.color = "#000";
+                output.classList.remove('hidden');
+                
+                measureHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+                measureHandler.setInputAction(function(movement) {
+                    let cartesian = viewer.scene.pickPosition(movement.position);
+                    if (!Cesium.defined(cartesian)) {
+                        const ray = viewer.camera.getPickRay(movement.position);
+                        cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+                    }
+                    if (Cesium.defined(cartesian)) {
+                        document.getElementById('xyz-display').innerText = `${cartesian.x.toFixed(3)}, ${cartesian.y.toFixed(3)}, ${cartesian.z.toFixed(3)}`;
+                        addMeasurePoint(cartesian);
+                    }
+                }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            } else {
+                btn.innerText = "Measure: OFF"; btn.style.background = "transparent"; btn.style.color = "#a2d032";
+                output.classList.add('hidden');
+                if(measureHandler) measureHandler.destroy();
+            }
+        };
+
+        function addMeasurePoint(pos) {
+            activePoints.push(pos);
+            activeEntities.push(viewer.entities.add({ position: pos, point: { pixelSize: 10, color: Cesium.Color.fromCssColorString('#a2d032'), outlineWidth: 2, disableDepthTestDistance: Number.POSITIVE_INFINITY } }));
+            if (activePoints.length > 1) {
+                const p1 = activePoints[activePoints.length - 2]; const p2 = activePoints[activePoints.length - 1];
+                const dist = Cesium.Cartesian3.distance(p1, p2);
+                document.getElementById('dist-display').innerText = `${dist.toFixed(2)} m`;
+                document.getElementById('delta-display').innerHTML = `<span class="text-gray-400">Add X:</span> <span class="text-[#a2d032]">${(p2.x-p1.x).toFixed(2)}</span><br><span class="text-gray-400">Add Y:</span> <span class="text-[#a2d032]">${(p2.y-p1.y).toFixed(2)}</span><br><span class="text-gray-400">Add Z:</span> <span class="text-[#a2d032]">${(p2.z-p1.z).toFixed(2)}</span>`;
+                activeEntities.push(viewer.entities.add({ polyline: { positions: [p1, p2], width: 3, material: Cesium.Color.fromCssColorString('#a2d032') } }));
+            }
+        }
+
+        window.undoLastPoint = function() {
+            if (activePoints.length === 0) return;
+            activePoints.pop(); const itemsToRemove = activePoints.length === 0 ? 1 : 2; 
+            for(let i=0; i < itemsToRemove; i++) { const entity = activeEntities.pop(); if(entity) viewer.entities.remove(entity); }
+        };
+
+        window.clearMeasurements = function() {
+            activeEntities.forEach(e => viewer.entities.remove(e));
+            activeEntities = []; activePoints = [];
+        };
+
+        // START
+        startApp();
+    </script>
+</body>
+</html>

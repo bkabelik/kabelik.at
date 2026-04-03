@@ -99,8 +99,8 @@
     <div id="cesium-container"></div>
 
     <!-- Top Overlay -->
-    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-[5000] pointer-events-none">
-        <div class="pointer-events-auto">
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[5000] pointer-events-none">
+        <div class="pointer-events-auto mr-auto">
             <a href="index.html"
                 class="glass-panel px-5 py-2.5 text-[10px] uppercase font-bold text-gray-400 hover:text-[#a2d032] transition flex items-center gap-2">
                 <span>←</span> Portal
@@ -223,8 +223,8 @@
                 // Apply initial -44m offset
                 updateElevation(0);
 
-                // Initial Zoom
-                viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-35), 220));
+                // Initial Zoom - Increased range to show whole data
+                viewer.zoomTo(tileset, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-35), 750));
 
                 const carto = Cesium.Cartographic.fromCartesian(baseCenter);
                 const latStr = Cesium.Math.toDegrees(carto.latitude).toFixed(5);
@@ -269,7 +269,8 @@
 
         function zoomToScan() {
             if (currentTileset) {
-                viewer.zoomTo(currentTileset, new Cesium.HeadingPitchRange(viewer.camera.heading, Cesium.Math.toRadians(-45), 180));
+                // Refocus distance increased to match the initial overview perspective
+                viewer.zoomTo(currentTileset, new Cesium.HeadingPitchRange(viewer.camera.heading, Cesium.Math.toRadians(-45), 750));
             }
         }
 
