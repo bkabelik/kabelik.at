@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Kabelik Splat Editor</title>
+    <meta charset="utf-8" />
+    <base href="">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="shortcut icon" href="../assets/favicon.png">
+    <meta name="description"
+        content="Advanced browser-based editor for manipulating and optimizing 3D Gaussian Splats." />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <!-- Service worker -->
+    <script>
+        const sw = navigator.serviceWorker;
+        if (sw) {
+            sw.register('./sw.js')
+                .then(reg => console.log('service worker registered', reg))
+                .catch(err => console.log('failed to register service worker', err));
+        }
+    </script>
+</head>
+
+<body>
+    <img src="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png" alt="Kabelik Logo"
+        style="position: absolute; top: 10px; right: 180px; height: 32px; z-index: 10000; pointer-events: none;" />
+    <a href="../index.html"
+        style="position: absolute; top: 10px; right: 10px; color: #050505; background: rgba(162, 208, 50, 0.8); padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 12px; font-weight: bold; z-index: 10000; font-family: monospace; transition: background 0.3s;"
+        onmouseover="this.style.background='rgba(162, 208, 50, 1)'"
+        onmouseout="this.style.background='rgba(162, 208, 50, 0.8)'">← Back to Overview</a>
+    <script type="module" src="./index.js"></script>
+    <script>
+        // Force the favicon to be the Kabelik one, overriding SuperSplat's dynamic runtime injection
+        setInterval(() => {
+            const links = document.querySelectorAll("link[rel*='icon']");
+            links.forEach(link => {
+                if (link.href && !link.href.includes('favicon.png')) {
+                    link.href = '../assets/favicon.png';
+                }
+            });
+        }, 500);
+    </script>
+</body>
+
+</html>
