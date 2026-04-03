@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Potree Viewer</title>
+
+	<link rel="stylesheet" type="text/css" href="libs/potree/potree.css">
+	<link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="libs/perfect-scrollbar/css/perfect-scrollbar.css">
+	<link rel="stylesheet" type="text/css" href="libs/openlayers3/ol.css">
+	<link rel="stylesheet" type="text/css" href="libs/spectrum/spectrum.css">
+	<link rel="stylesheet" type="text/css" href="libs/jstree/themes/mixed/style.css">
+</head>
+
+<body>
+	<script src="libs/jquery/jquery-3.1.1.min.js"></script>
+	<script src="libs/spectrum/spectrum.js"></script>
+	<script src="libs/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+	<script src="libs/jquery-ui/jquery-ui.min.js"></script>
+	<script src="libs/three.js/build/three.min.js"></script>
+	<script src="libs/other/BinaryHeap.js"></script>
+	<script src="libs/tween/tween.min.js"></script>
+	<script src="libs/d3/d3.js"></script>
+	<script src="libs/proj4/proj4.js"></script>
+	<script src="libs/openlayers3/ol.js"></script>
+	<script src="libs/i18next/i18next.js"></script>
+	<script src="libs/jstree/jstree.js"></script>
+	<script src="libs/potree/potree.js"></script>
+	<script src="libs/plasio/js/laslaz.js"></script>
+	
+	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .glass-panel { background: rgba(15, 15, 20, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; pointer-events: auto; }
+        .tech-font { font-family: 'JetBrains Mono', monospace; }
+        /* Potree UI overrides to match CI */
+        #potree_sidebar_container { background: #050505 !important; color: white !important; }
+        #potree_sidebar_container img, #potree_sidebar_container svg { display: inline; }
+        .ui-widget-content { background: #050505 !important; color: white !important; border-color: rgba(255,255,255,0.1) !important; }
+        .ui-state-default, .ui-widget-content .ui-state-default { background: rgba(255,255,255,0.05) !important; color: #a2d032 !important; border-color: rgba(255,255,255,0.1) !important; }
+        .ui-slider-range { background: #a2d032 !important; }
+    </style>
+	
+	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
+		<div id="potree_render_area"></div>
+		<div id="potree_sidebar_container"> </div>
+	</div>
+
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-[5000] pointer-events-none">
+        <div class="pointer-events-auto">
+            <div class="glass-panel px-5 py-2.5 text-[10px] uppercase font-bold text-gray-400">LiDAR Point Cloud</div>
+        </div>
+        <div class="glass-panel px-6 py-4 flex items-center gap-6 pointer-events-auto">
+            <div class="flex flex-col text-right">
+                <div class="flex items-center gap-2 justify-end">
+                    <div class="w-2 h-2 bg-[#a2d032] rounded-full shadow-[0_0_10px_#a2d032]"></div>
+                    <span class="tech-font text-[11px] text-[#a2d032] font-bold uppercase tracking-widest">Active</span>
+                </div>
+                <span id="loc-display" class="text-[9px] text-gray-500 uppercase tracking-widest font-medium">Potree View</span>
+            </div>
+            <img src="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png" alt="Logo" class="h-8">
+        </div>
+    </nav>
+	
+	<script>
+	
+		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
+		
+		document.title = "Kabelik LiDAR";
+		viewer.setEDLEnabled(true);
+		viewer.setBackground("black"); // ["skybox", "gradient", "black", "white"];
+		viewer.loadSettingsFromURL();
+		
+		viewer.loadGUI(() => {
+			viewer.setLanguage('en');
+			$("#menu_appearance").next().show();
+			$("#menu_tools").next().show();
+			$("#menu_scene").next().show();
+			viewer.toggleSidebar();
+		});
+		
+		Potree.loadPointCloud("pointclouds/lk/cloud.js", "lk", e => {
+			let pointcloud = e.pointcloud;
+			let material = pointcloud.material;
+			viewer.scene.addPointCloud(pointcloud);
+			material.pointColorType = Potree.PointColorType.RGB; // any Potree.PointColorType.XXXX 
+			material.size = 1;
+			material.pointSizeType = Potree.PointSizeType.FIXED;
+			material.shape = Potree.PointShape.SQUARE;
+			viewer.fitToScreen();
+		});
+		
+	</script>
+	
+	
+  </body>
+</html>
