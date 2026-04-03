@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabelik | Remote Sensing & Geomatics</title>
+    <meta name="description" content="Explore our range of Remote Sensing, Geomatics and IT services designed to provide accurate and reliable information to help businesses make decisions.">
+    <title>Kabelik GmbH - Kabelik GmbH your Partner for Remote Sensing, Geomatics and IT Services</title>
     <!-- Tailwind CSS for Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Three.js for 3D Rendering -->
@@ -13,8 +14,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/png"
-        href="https://www.kabelik.at/wp-content/uploads/2019/05/cropped-logo_transparent_1_278.png">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 
     <!-- NOTE: Tailwind Play CDN is used for development/demonstration. 
          For production, a compiled CSS file or Tailwind CLI should be used. -->
@@ -192,7 +192,7 @@
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div class="order-2 md:order-1 space-y-4">
                     <div class="glass-panel overflow-hidden rounded-xl border border-white/10">
-                        <img src="assets/cross_section.png" alt="Bathymetry Cross Section"
+                        <img src="assets/cross_section.webp" alt="Bathymetry Cross Section"
                             class="w-full h-auto opacity-80 hover:opacity-100 transition duration-500">
                         <div class="p-4 bg-black/40 backdrop-blur-md">
                             <span class="tech-font text-[10px] text-gray-400 uppercase">Riverbed Cross-Section
@@ -201,14 +201,14 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="glass-panel overflow-hidden rounded-xl border border-white/10 font-bold uppercase">
-                            <img src="assets/15_dsm.jpg" alt="Digital Surface Model"
+                            <img src="assets/15_dsm.webp" alt="Digital Surface Model"
                                 class="w-full aspect-square object-cover opacity-60 hover:opacity-100 transition duration-500">
                             <div class="p-2 text-center bg-black/40">
                                 <span class="tech-font text-[9px] text-gray-500">DSM VIEW</span>
                             </div>
                         </div>
                         <div class="glass-panel overflow-hidden rounded-xl border border-white/10 font-bold uppercase">
-                            <img src="assets/16_dtm.jpg" alt="Digital Terrain Model"
+                            <img src="assets/16_dtm.webp" alt="Digital Terrain Model"
                                 class="w-full aspect-square object-cover opacity-60 hover:opacity-100 transition duration-500">
                             <div class="p-2 text-center bg-black/40">
                                 <span class="tech-font text-[9px] text-gray-500">DTM VIEW</span>
@@ -342,29 +342,50 @@
             class="min-h-[80vh] flex flex-col justify-center px-6 md:px-20 relative border-t border-white/5">
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div class="glass-panel p-8 md:p-12">
+                    <div class="tech-font text-[#a2d032] text-xs mb-4">SPATIAL DATA ARCHITECTURE</div>
                     <h2 class="text-3xl font-bold mb-4">WEB/GIS</h2>
                     <p class="text-gray-400 mb-6">
-                        Custom Geoinformation data handling, conversion and management. We provide high-performance Web
-                        Map Services and pointcloud viewers for seamless data access.
+                        Custom Geoinformation data handling, conversion and enterprise management. We architect high-performance Spatial Data Infrastructures for seamless data access and mobile field workflows.
                     </p>
-                    <ul class="space-y-3 text-sm text-gray-300">
-                        <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> Enterprise Stack: QGIS Server &
-                            PostGIS
+                    <ul class="space-y-4 text-sm text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full mt-1.5 flex-shrink-0"></span>
+                            <div>
+                                <span class="font-bold text-white">GeoNode SDI Stack</span>
+                                <p class="text-xs text-gray-400 mt-0.5">Enterprise spatial catalog for mapping, sharing, and securely managing vector and raster datasets.</p>
+                            </div>
                         </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> SaaS Backend: High-Performance GPS
-                            Analytics
+                        <li class="flex items-start gap-3">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full mt-1.5 flex-shrink-0"></span>
+                            <div>
+                                <span class="font-bold text-white">GeoServer & QGIS Server</span>
+                                <p class="text-xs text-gray-400 mt-0.5">High-performance rendering engines providing standardized OGC-compliant WMS and WFS web services.</p>
+                            </div>
                         </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[#a2d032] rounded-full"></span> FttH Deployment: Automated GIS
-                            Workflows
+                        <li class="flex items-start gap-3">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full mt-1.5 flex-shrink-0"></span>
+                            <div>
+                                <span class="font-bold text-white">Mergin Maps Server</span>
+                                <p class="text-xs text-gray-400 mt-0.5">Enabling collaborative field data collection natively synchronized with central enterprise databases.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-2 h-2 bg-[#a2d032] rounded-full mt-1.5 flex-shrink-0"></span>
+                            <div>
+                                <span class="font-bold text-white">QWC2 Integrated Dashboards</span>
+                                <p class="text-xs text-gray-400 mt-0.5">Custom QGIS Web Client 2 implementations for deeply interactive web mapping applications and analysis tools.</p>
+                            </div>
                         </li>
                     </ul>
                 </div>
-                <div
-                    class="h-64 md:h-full flex items-center justify-center border border-dashed border-white/20 rounded-xl bg-white/5">
-                    <span class="tech-font text-xs text-gray-500">[ Interactive Map Dashboard Area ]</span>
+                <!-- QWC2 Interactive Map Viewer -->
+                <div class="h-full flex flex-col justify-center relative">
+                    <div class="glass-panel overflow-hidden rounded-xl border border-white/10 group relative">
+                        <img src="assets/qwc2.webp" alt="QWC2 Web GIS Client" class="w-full h-auto opacity-80 group-hover:opacity-100 transition duration-500">
+                        <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
+                            <span class="tech-font text-[10px] text-[#a2d032] uppercase tracking-widest">QGIS Web Client 2</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
