@@ -143,9 +143,13 @@
             <div class="grid grid-cols-2 gap-3">
                 <button onclick="zoomToScan()"
                     class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-[#a2d032] border-[#a2d032]/30 transition-all">Refocus</button>
-                <button onclick="toggleMap()" id="map-btn"
-                    class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-white border-white/20 transition-all">Ground:
-                    ON</button>
+                <select id="map-select" onchange="changeMap(this.value)"
+                    class="py-3 px-1 glass-panel text-[9px] uppercase font-bold tracking-widest text-white border-white/20 transition-all outline-none cursor-pointer hover:bg-white/5 appearance-none text-center">
+                    <option value="osm" class="bg-[#0f0f14] text-white">Map: OSM</option>
+                    <option value="basemap" class="bg-[#0f0f14] text-white">Map: Basemap</option>
+                    <option value="ortho" class="bg-[#0f0f14] text-white">Map: Ortho</option>
+                    <option value="off" class="bg-[#0f0f14] text-gray-500">Map: OFF</option>
+                </select>
             </div>
         </div>
     </div>
@@ -158,12 +162,24 @@
             if (portalBtn) portalBtn.parentElement.style.display = 'none';
         }
 
-        // Use a rock-solid, direct URL for OSM
-        const osmLayer = new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+        // Initialize Map Providers
+        const osmProvider = new Cesium.UrlTemplateImageryProvider({
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             maximumLevel: 19,
             credit: '© OpenStreetMap contributors'
-        }));
+        });
+
+        const basemapProvider = new Cesium.UrlTemplateImageryProvider({
+            url: 'https://mapsneu.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png',
+            maximumLevel: 19,
+            credit: 'Datenquelle: basemap.at'
+        });
+
+        const orthofotoProvider = new Cesium.UrlTemplateImageryProvider({
+            url: 'https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg',
+            maximumLevel: 20,
+            credit: 'Datenquelle: basemap.at'
+        });
 
         const viewer = new Cesium.Viewer('cesium-container', {
             imageryProvider: false,
@@ -183,7 +199,7 @@
             requestRenderMode: false
         });
 
-        viewer.imageryLayers.add(osmLayer);
+        viewer.imageryLayers.addImageryProvider(osmProvider);
         async function initTerrain() {
             try {
                 // Lädt die layer.json aus deinem ./terrain Ordner
@@ -274,9 +290,15 @@
             }
         }
 
-        function toggleMap() {
-            osmLayer.show = !osmLayer.show;
-            document.getElementById('map-btn').innerText = `Ground: ${osmLayer.show ? 'ON' : 'OFF'}`;
+        function changeMap(mapType) {
+            viewer.imageryLayers.removeAll();
+            if (mapType === 'osm') {
+                viewer.imageryLayers.addImageryProvider(osmProvider);
+            } else if (mapType === 'basemap') {
+                viewer.imageryLayers.addImageryProvider(basemapProvider);
+            } else if (mapType === 'ortho') {
+                viewer.imageryLayers.addImageryProvider(orthofotoProvider);
+            }
         }
     </script>
 </body>

@@ -96,7 +96,13 @@
 
             <div class="grid grid-cols-2 gap-3 pt-2 border-b border-white/5 pb-3">
                 <button onclick="zoomToScan()" class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-[#a2d032] hover:bg-[#a2d032]/10 transition-all">Refocus</button>
-                <button onclick="toggleMap()" id="map-btn" class="py-3 glass-panel text-[9px] uppercase font-bold tracking-widest text-white hover:bg-white/10 transition-all">Ground: ON</button>
+                <select id="map-select" onchange="changeMap(this.value)"
+                    class="py-3 px-1 glass-panel text-[9px] uppercase font-bold tracking-widest text-white transition-all outline-none cursor-pointer hover:bg-white/10 appearance-none text-center bg-transparent">
+                    <option value="osm" class="bg-[#0f0f14] text-white">Map: OSM</option>
+                    <option value="basemap" class="bg-[#0f0f14] text-white">Map: Basemap</option>
+                    <option value="ortho" class="bg-[#0f0f14] text-white">Map: Ortho</option>
+                    <option value="off" class="bg-[#0f0f14] text-gray-500">Map: OFF</option>
+                </select>
             </div>
             
             <div class="flex gap-2">
@@ -112,7 +118,9 @@
         // --- GLOBALS ---
         let viewer;
         let splatTileset;
-        let osmLayer;
+        let osmProvider;
+        let basemapProvider;
+        let orthofotoProvider;
         let baseCenter = null;
         let originalModelCenter = null;
 
@@ -126,10 +134,18 @@
             maximumRenderTimeChange: Infinity    // Don't render just because time passed
         });
 
-        osmLayer = new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+        osmProvider = new Cesium.UrlTemplateImageryProvider({
             url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maximumLevel: 19, credit: '© OpenStreetMap'
-        }));
-        viewer.imageryLayers.add(osmLayer);
+        });
+        basemapProvider = new Cesium.UrlTemplateImageryProvider({
+            url: 'https://mapsneu.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png',
+            maximumLevel: 19, credit: 'Datenquelle: basemap.at'
+        });
+        orthofotoProvider = new Cesium.UrlTemplateImageryProvider({
+            url: 'https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg',
+            maximumLevel: 20, credit: 'Datenquelle: basemap.at'
+        });
+        viewer.imageryLayers.addImageryProvider(osmProvider);
         viewer.scene.globe.show = true;
         viewer.scene.globe.depthTestAgainstTerrain = true;
 
@@ -200,7 +216,17 @@
         };
 
         window.zoomToScan = function() { if (splatTileset) viewer.zoomTo(splatTileset); };
-        window.toggleMap = function() { osmLayer.show = !osmLayer.show; document.getElementById('map-btn').innerText = `Ground: ${osmLayer.show ? 'ON' : 'OFF'}`; };
+        
+        window.changeMap = function(mapType) {
+            viewer.imageryLayers.removeAll();
+            if (mapType === 'osm') {
+                viewer.imageryLayers.addImageryProvider(osmProvider);
+            } else if (mapType === 'basemap') {
+                viewer.imageryLayers.addImageryProvider(basemapProvider);
+            } else if (mapType === 'ortho') {
+                viewer.imageryLayers.addImageryProvider(orthofotoProvider);
+            }
+        };
 
         // --- TOOLS LOGIC ---
         let isMeasuring = false; let isPlacing = false;
