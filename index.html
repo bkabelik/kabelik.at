@@ -629,6 +629,9 @@
                 2700 Wiener Neustadt<br>
                 AUSTRIA
             </div>
+            <div class="mt-8 text-xs">
+                <a href="legal.html" class="text-gray-500 hover:text-white transition underline">Privacy Policy & Legal Notice</a>
+            </div>
         </footer>
 
         <!-- AIRCRAFT GALLERY -->
@@ -656,59 +659,59 @@
             </div>
         </section>
 
-        <!-- IMPRINT SECTION -->
-        <section id="imprint" class="py-20 px-6 md:px-20 border-t border-white/10">
-            <div class="max-w-4xl mx-auto glass-panel p-8 md:p-12">
-                <h2 class="text-2xl font-bold mb-6 text-[#a2d032]">Legal Notice / Impressum</h2>
-                <div class="space-y-6 text-sm text-gray-400 leading-relaxed">
-                    <p>Information according to § 5 E-Commerce Act (ECG) and disclosure according to §§ 24, 25 Media Act (Mediengesetz).</p>
-                    
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Media Owner, Publisher, and Service Provider:</h3>
-                        <p>Kabelik GmbH<br>Merbotogasse 58D<br>2700 Wiener Neustadt<br>Austria</p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Contact:</h3>
-                        <p>E-Mail: <a href="mailto:office@kabelik.at" class="text-[#a2d032] hover:underline">office@kabelik.at</a></p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Company Information:</h3>
-                        <ul class="space-y-1">
-                            <li><strong class="text-gray-300">Business Purpose (Unternehmensgegenstand):</strong> IT Services, Management Consulting, Surveying (Geomatics)</li>
-                            <li><strong class="text-gray-300">Commercial Register Number (Firmenbuchnummer):</strong> FN 515390 b</li>
-                            <li><strong class="text-gray-300">Court of Registration (Firmenbuchgericht):</strong> Landesgericht Wiener Neustadt</li>
-                            <li><strong class="text-gray-300">VAT ID (UID-Nummer):</strong> ATU74563019</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Managing Director:</h3>
-                        <p>DI(FH) Benjamin Kabelik, MSc</p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Memberships & Authorities:</h3>
-                        <p>Member of the Austrian Economic Chambers (WKO Niederösterreich) - Trade Group UBIT (Management Consultancy, Accounting and IT)<br>
-                        <strong class="text-gray-300">Supervisory/Trade Authority (Aufsichtsbehörde/Gewerbebehörde):</strong> Magistrat der Stadt Wiener Neustadt<br>
-                        <strong class="text-gray-300">Applicable Legal Regulations:</strong> Austrian Trade Act (Gewerbeordnung - GewO), accessible at <a href="https://www.ris.bka.gv.at" target="_blank" class="text-[#a2d032] hover:underline">www.ris.bka.gv.at</a></p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Disclosure of Ownership (§ 25 Media Act):</h3>
-                        <p><strong class="text-gray-300">Shareholders:</strong> 100% DI(FH) Benjamin Kabelik, MSc</p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-gray-200 mb-2">Basic Direction of the Website (Editorial Policy / Blattlinie):</h3>
-                        <p>Information about the company's services to promote its own business purposes.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
+
+    <!-- COOKIE BANNER -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full z-[9999] p-6 translate-y-full transition-transform duration-500 flex justify-center pointer-events-none">
+        <div class="glass-panel p-6 md:p-8 w-full max-w-4xl pointer-events-auto border-t-2 border-[#a2d032] bg-[#050505]/95 shadow-2xl">
+            <h3 class="text-xl font-bold mb-3 text-white">Privacy & Cookies</h3>
+            <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+                We use functional cookies to provide you with the best possible experience and continuously improve our website. 
+                Non-essential cookies or third-party tracking tools are only loaded with your active consent. 
+                You can change your decision at any time. For more information, please read our 
+                <a href="legal.html" class="text-[#a2d032] underline hover:text-white transition">Privacy Policy</a>.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                <button onclick="handleCookieConsent(false)" class="px-6 py-2.5 rounded font-bold text-sm border border-white/20 text-white bg-white/5 hover:bg-white/15 transition text-center w-full sm:w-auto focus:outline-none">
+                    Essential Only (Reject)
+                </button>
+                <button onclick="handleCookieConsent(true)" class="px-6 py-2.5 rounded font-bold text-sm border border-white/20 text-white bg-white/5 hover:bg-white/15 transition text-center w-full sm:w-auto focus:outline-none">
+                    Accept All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const banner = document.getElementById("cookie-banner");
+            const consent = localStorage.getItem("cookie_consent");
+
+            if (!consent) {
+                setTimeout(() => {
+                    banner.classList.remove("translate-y-full");
+                }, 1000);
+            } else {
+                applyConsent(consent === "true");
+            }
+        });
+
+        function handleCookieConsent(accepted) {
+            localStorage.setItem("cookie_consent", accepted);
+            const banner = document.getElementById("cookie-banner");
+            banner.classList.add("translate-y-full");
+            applyConsent(accepted);
+        }
+
+        function applyConsent(accepted) {
+            if (accepted) {
+                console.log("Nicht-essenzielle Cookies und Scripte werden geladen...");
+                // Hook to load non-essential scripts (e.g., analytics)
+            } else {
+                console.log("Nur essenzielle Cookies/Scripts sind aktiv.");
+            }
+        }
+    </script>
 
     <!-- Three.js Logic for Background Animation -->
     <script>
