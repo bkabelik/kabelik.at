@@ -958,6 +958,9 @@
         function animate() {
             requestAnimationFrame(animate);
 
+            // Optimization: Pause rendering if scrolled past the hero section to save battery/CPU
+            if (window.scrollY > window.innerHeight * 1.2) return;
+
             // Gentle rotation
             starField.rotation.x += 0.0005;
             starField.rotation.y += 0.0005;
